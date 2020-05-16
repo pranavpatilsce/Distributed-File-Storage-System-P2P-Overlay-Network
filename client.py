@@ -15,6 +15,7 @@ CHUNK_SIZE = 1024 * 1024  # decrease the value here to evaluate memory usage
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
+#stub = None
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -51,7 +52,7 @@ def upload_file():
                         yield result
                         if not b:
                             break
-
+                #global stub         
                 result = stub.Upload(upload_request_generator())
                 logging.info(f'file {i} {file.name} was upload successfully')
                 results.append(MessageToJson(result))
@@ -79,8 +80,9 @@ def upload_file():
 
 
 if __name__ == "__main__":
-    channel = grpc.insecure_channel('grpc_service:22222')
-    stub = rpc.GreeterStub(channel)
     print('hellllllllllllllllladkjashdjhasjdkhasjdhjaskdhjk')
+    channel = grpc.insecure_channel('localhost:22222')
+    #global stub
+    stub = rpc.GreeterStub(channel)
     print(stub)
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True)
