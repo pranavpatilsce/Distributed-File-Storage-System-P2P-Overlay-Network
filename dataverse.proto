@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+service Greeter {
+  rpc Upload (stream ImageUploadRequest) returns (ImageUploadResponse) {};
+  rpc Search (SearchRequest) returns (SearchResponse){};
+}
+
+
+enum ImageUploadStatusCode {
+  Ok = 0;
+  Failed = 1;
+  Unknown = 2;
+  InProgress = 3;
+}
+
+message ImageUploadRequest {
+  bytes Content = 1;
+  string Id = 2;
+  ImageUploadStatusCode StatusCode = 3;
+  string Username = 4;
+}
+
+message ImageUploadResponse {
+  string Id = 1;
+  ImageUploadStatusCode StatusCode = 2;
+  string Message = 3;
+  string Username = 4;
+}
+
+message SearchRequest {
+  string Filename = 1;
+  string Username = 2;
+}
+
+message SearchResponse {
+  string found = 1;
+}
