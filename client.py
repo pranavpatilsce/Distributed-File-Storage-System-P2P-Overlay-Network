@@ -36,7 +36,7 @@ def selectServer():
         global channel
         if channel!=None:
             print('Channel connection exists!')
-            channel.close() 
+            channel.close()
         print('Creating Connection!')
         channel = grpc.insecure_channel(serverip+':'+serverport)
         global stub
@@ -151,6 +151,40 @@ def search_file():
     {% endif %}
     ''', json_response=request.args.get('json'))
 
+@app.route('/config', methods=['GET', 'POST'])
+def config():
+    if request.method == 'POST':
+        results = []
+        IP = request.form["IP"]
+        PORT = request.form["PORT"]
+        global stub
+        result = stub.Config(service.ConfigRequest(Server=IP+':'+PORT))
+        logging.info(f' Params IP {IP} | PORT {PORT}')
+        results.append(MessageToJson(result))
+        print("----------------")
+        print(json.dumps(results))
+        print("----------------")
+        return redirect(url_for('config', json=json.dumps(results)))  # we need a safe string to pass as url param
+    return render_template_string('''
+    <!doctype html>
+    <title>Connect to a Node</title>
+    <h1>Connect to a Node</h1>
+    <form method=post>
+      IPv4 Address: <input type=text name=IP><br>
+      Port Number:<input type=text name=PORT><br>
+      <input type=submit value=Connect>
+    </form>
+    {% if json_response %}
+    <h1>Response from server</h1>
+    <ol>
+    {% for item in (json_response|json_loads) %}
+    <li>
+        {{ (item|json_loads) }}
+    </li>
+    {% endfor %}
+    </ol>
+    {% endif %}
+    ''', json_response=request.args.get('json'))
 
 if __name__ == "__main__":
     print('hellllllllllllllllladkjashdjhasjdkhasjdhjaskdhjk')
