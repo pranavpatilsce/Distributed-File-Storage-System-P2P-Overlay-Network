@@ -3,6 +3,7 @@ syntax = "proto3";
 service Greeter {
   rpc Upload (stream ImageUploadRequest) returns (ImageUploadResponse) {};
   rpc Search (SearchRequest) returns (SearchResponse){};
+  rpc Config (ConfigRequest) returns (ConfigResponse){};
 }
 
 
@@ -34,4 +35,12 @@ message SearchRequest {
 
 message SearchResponse {
   string found = 1;
+}
+
+message ConfigRequest {
+  string Server = 1;
+}
+
+message ConfigResponse {
+  string Status = 1;
 }

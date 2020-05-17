@@ -16,6 +16,8 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
 #stub = None
+stub = None
+channel = None
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -24,6 +26,37 @@ def allowed_file(filename):
 @app.template_filter('json_loads')
 def json_loads_filter(s):
     return json.loads(s) if s else None
+
+@app.route('/selectServer', methods=['GET','POST'])
+def selectServer():
+    if request.method == 'POST':
+        serverip = request.form["serverip"]
+        serverport = request.form["serverport"]
+        print('serverip is'+serverip)
+        global channel
+        if channel!=None:
+            print('Channel connection exists!')
+            channel.close()
+        print('Creating Connection!')
+        channel = grpc.insecure_channel(serverip+':'+serverport)
+        global stub
+        stub = rpc.GreeterStub(channel)
+        print(stub)
+        logging.info('Connection to'+serverip+':'+serverport+' created successfully')
+        return 'Connection to '+serverip+':'+serverport+' created successfully' # we need a safe string to pass as url param
+    return render_template_string('''
+    <!doctype html>
+    <title>Select Server</title>
+    <h1>Select Server</h1>
+    <form method=post enctype=multipart/form-data>
+      Enter Server IP: <input type=text name=serverip>
+      Enter Server Port: <input type=text name=serverport>
+      <input type=submit value=Select>
+    </form>
+    {% if json_response %}
+    <h1>Client connected with the server</h1>
+    {% endif %}
+    ''', json_response=request.args.get('json'))
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -57,7 +90,7 @@ def upload_file():
                         yield result
                         if not b:
                             break
-                #global stub
+                global stub
                 result = stub.Upload(upload_request_generator())
                 logging.info(f'file {i} {file.name} was upload successfully')
                 results.append(MessageToJson(result))
@@ -89,7 +122,7 @@ def search_file():
         results = []
         uname = request.form["username"]
         fname = request.form["filename"]
-        #global stub
+        global stub
         result = stub.Search(service.SearchRequest(Filename=fname, Username=uname))
         logging.info(f' Params Uname {fname} | Fname {fname}')
         results.append(MessageToJson(result))
@@ -118,11 +151,41 @@ def search_file():
     {% endif %}
     ''', json_response=request.args.get('json'))
 
+@app.route('/config', methods=['GET', 'POST'])
+def config():
+    if request.method == 'POST':
+        results = []
+        IP = request.form["IP"]
+        PORT = request.form["PORT"]
+        global stub
+        result = stub.Config(service.ConfigRequest(Server=IP+':'+PORT))
+        logging.info(f' Params IP {IP} | PORT {PORT}')
+        results.append(MessageToJson(result))
+        print("----------------")
+        print(json.dumps(results))
+        print("----------------")
+        return redirect(url_for('config', json=json.dumps(results)))  # we need a safe string to pass as url param
+    return render_template_string('''
+    <!doctype html>
+    <title>Connect to a Node</title>
+    <h1>Connect to a Node</h1>
+    <form method=post>
+      IPv4 Address: <input type=text name=IP><br>
+      Port Number:<input type=text name=PORT><br>
+      <input type=submit value=Connect>
+    </form>
+    {% if json_response %}
+    <h1>Response from server</h1>
+    <ol>
+    {% for item in (json_response|json_loads) %}
+    <li>
+        {{ (item|json_loads) }}
+    </li>
+    {% endfor %}
+    </ol>
+    {% endif %}
+    ''', json_response=request.args.get('json'))
 
 if __name__ == "__main__":
     print('hellllllllllllllllladkjashdjhasjdkhasjdhjaskdhjk')
-    channel = grpc.insecure_channel('localhost:22222')
-    #global stub
-    stub = rpc.GreeterStub(channel)
-    print(stub)
     app.run(host='0.0.0.0', debug=True)

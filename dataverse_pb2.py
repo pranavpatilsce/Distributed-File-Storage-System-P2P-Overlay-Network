@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x0f\x64\x61taverse.proto\"o\n\x12ImageUploadRequest\x12\x0f\n\x07\x43ontent\x18\x01 \x01(\x0c\x12\n\n\x02Id\x18\x02 \x01(\t\x12*\n\nStatusCode\x18\x03 \x01(\x0e\x32\x16.ImageUploadStatusCode\x12\x10\n\x08Username\x18\x04 \x01(\t\"p\n\x13ImageUploadResponse\x12\n\n\x02Id\x18\x01 \x01(\t\x12*\n\nStatusCode\x18\x02 \x01(\x0e\x32\x16.ImageUploadStatusCode\x12\x0f\n\x07Message\x18\x03 \x01(\t\x12\x10\n\x08Username\x18\x04 \x01(\t\"3\n\rSearchRequest\x12\x10\n\x08\x46ilename\x18\x01 \x01(\t\x12\x10\n\x08Username\x18\x02 \x01(\t\"\x1f\n\x0eSearchResponse\x12\r\n\x05\x66ound\x18\x01 \x01(\t*H\n\x15ImageUploadStatusCode\x12\x06\n\x02Ok\x10\x00\x12\n\n\x06\x46\x61iled\x10\x01\x12\x0b\n\x07Unknown\x10\x02\x12\x0e\n\nInProgress\x10\x03\x32o\n\x07Greeter\x12\x37\n\x06Upload\x12\x13.ImageUploadRequest\x1a\x14.ImageUploadResponse\"\x00(\x01\x12+\n\x06Search\x12\x0e.SearchRequest\x1a\x0f.SearchResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x0f\x64\x61taverse.proto\"o\n\x12ImageUploadRequest\x12\x0f\n\x07\x43ontent\x18\x01 \x01(\x0c\x12\n\n\x02Id\x18\x02 \x01(\t\x12*\n\nStatusCode\x18\x03 \x01(\x0e\x32\x16.ImageUploadStatusCode\x12\x10\n\x08Username\x18\x04 \x01(\t\"p\n\x13ImageUploadResponse\x12\n\n\x02Id\x18\x01 \x01(\t\x12*\n\nStatusCode\x18\x02 \x01(\x0e\x32\x16.ImageUploadStatusCode\x12\x0f\n\x07Message\x18\x03 \x01(\t\x12\x10\n\x08Username\x18\x04 \x01(\t\"3\n\rSearchRequest\x12\x10\n\x08\x46ilename\x18\x01 \x01(\t\x12\x10\n\x08Username\x18\x02 \x01(\t\"\x1f\n\x0eSearchResponse\x12\r\n\x05\x66ound\x18\x01 \x01(\t\"\x1f\n\rConfigRequest\x12\x0e\n\x06Server\x18\x01 \x01(\t\" \n\x0e\x43onfigResponse\x12\x0e\n\x06Status\x18\x01 \x01(\t*H\n\x15ImageUploadStatusCode\x12\x06\n\x02Ok\x10\x00\x12\n\n\x06\x46\x61iled\x10\x01\x12\x0b\n\x07Unknown\x10\x02\x12\x0e\n\nInProgress\x10\x03\x32\x9c\x01\n\x07Greeter\x12\x37\n\x06Upload\x12\x13.ImageUploadRequest\x1a\x14.ImageUploadResponse\"\x00(\x01\x12+\n\x06Search\x12\x0e.SearchRequest\x1a\x0f.SearchResponse\"\x00\x12+\n\x06\x43onfig\x12\x0e.ConfigRequest\x1a\x0f.ConfigResponse\"\x00\x62\x06proto3'
 )
 
 _IMAGEUPLOADSTATUSCODE = _descriptor.EnumDescriptor(
@@ -47,8 +47,8 @@ _IMAGEUPLOADSTATUSCODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=332,
-  serialized_end=404,
+  serialized_start=399,
+  serialized_end=471,
 )
 _sym_db.RegisterEnumDescriptor(_IMAGEUPLOADSTATUSCODE)
 
@@ -232,12 +232,76 @@ _SEARCHRESPONSE = _descriptor.Descriptor(
   serialized_end=330,
 )
 
+
+_CONFIGREQUEST = _descriptor.Descriptor(
+  name='ConfigRequest',
+  full_name='ConfigRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='Server', full_name='ConfigRequest.Server', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=332,
+  serialized_end=363,
+)
+
+
+_CONFIGRESPONSE = _descriptor.Descriptor(
+  name='ConfigResponse',
+  full_name='ConfigResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='Status', full_name='ConfigResponse.Status', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=365,
+  serialized_end=397,
+)
+
 _IMAGEUPLOADREQUEST.fields_by_name['StatusCode'].enum_type = _IMAGEUPLOADSTATUSCODE
 _IMAGEUPLOADRESPONSE.fields_by_name['StatusCode'].enum_type = _IMAGEUPLOADSTATUSCODE
 DESCRIPTOR.message_types_by_name['ImageUploadRequest'] = _IMAGEUPLOADREQUEST
 DESCRIPTOR.message_types_by_name['ImageUploadResponse'] = _IMAGEUPLOADRESPONSE
 DESCRIPTOR.message_types_by_name['SearchRequest'] = _SEARCHREQUEST
 DESCRIPTOR.message_types_by_name['SearchResponse'] = _SEARCHRESPONSE
+DESCRIPTOR.message_types_by_name['ConfigRequest'] = _CONFIGREQUEST
+DESCRIPTOR.message_types_by_name['ConfigResponse'] = _CONFIGRESPONSE
 DESCRIPTOR.enum_types_by_name['ImageUploadStatusCode'] = _IMAGEUPLOADSTATUSCODE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -269,6 +333,20 @@ SearchResponse = _reflection.GeneratedProtocolMessageType('SearchResponse', (_me
   })
 _sym_db.RegisterMessage(SearchResponse)
 
+ConfigRequest = _reflection.GeneratedProtocolMessageType('ConfigRequest', (_message.Message,), {
+  'DESCRIPTOR' : _CONFIGREQUEST,
+  '__module__' : 'dataverse_pb2'
+  # @@protoc_insertion_point(class_scope:ConfigRequest)
+  })
+_sym_db.RegisterMessage(ConfigRequest)
+
+ConfigResponse = _reflection.GeneratedProtocolMessageType('ConfigResponse', (_message.Message,), {
+  'DESCRIPTOR' : _CONFIGRESPONSE,
+  '__module__' : 'dataverse_pb2'
+  # @@protoc_insertion_point(class_scope:ConfigResponse)
+  })
+_sym_db.RegisterMessage(ConfigResponse)
+
 
 
 _GREETER = _descriptor.ServiceDescriptor(
@@ -277,8 +355,8 @@ _GREETER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=406,
-  serialized_end=517,
+  serialized_start=474,
+  serialized_end=630,
   methods=[
   _descriptor.MethodDescriptor(
     name='Upload',
@@ -296,6 +374,15 @@ _GREETER = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SEARCHREQUEST,
     output_type=_SEARCHRESPONSE,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='Config',
+    full_name='Greeter.Config',
+    index=2,
+    containing_service=None,
+    input_type=_CONFIGREQUEST,
+    output_type=_CONFIGRESPONSE,
     serialized_options=None,
   ),
 ])

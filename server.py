@@ -12,6 +12,7 @@ import dataverse_pb2_grpc as rpc
 
 
 cache = set()
+connectedHosts = set()
 
 class ImageServiceServer(rpc.GreeterServicer):  # inheriting here from the protobuf rpc file which is generated
 
@@ -63,6 +64,13 @@ class ImageServiceServer(rpc.GreeterServicer):  # inheriting here from the proto
         if(file in cache):
             return service.SearchResponse(found="YES")
         return service.SearchResponse(found="NO")
+
+    def Config(self, request, context):
+        print(request)
+        Server = request.Server
+        print(Server)
+        connectedHosts.add(Server)
+        return service.ConfigResponse(Status="Server :"+Server+" Added")
 
 if __name__ == '__main__':
     try:
