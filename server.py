@@ -68,7 +68,7 @@ class ImageServiceServer(rpc.GreeterServicer):  # inheriting here from the proto
     def Config(self, request, context):
         print(request)
         Server = request.Server
-        print(Server
+        print(Server)
         connectedHosts.add(Server)
         return service.ConfigResponse(Status="Server :"+Server+" Added")
 
