@@ -1,2 +1,1 @@
-./data/temp/vid.mp4
-./data/temp/download.jpeg
+./data/danav/ss.png
