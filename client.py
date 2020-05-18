@@ -4,6 +4,8 @@ import logging
 import json
 from flask import Flask, flash, request, redirect, url_for, render_template_string, send_file
 
+from pathlib import Path
+import os
 import grpc
 import dataverse_pb2 as service
 import dataverse_pb2_grpc as rpc
@@ -11,7 +13,7 @@ from google.protobuf.json_format import MessageToJson
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', '.gif','mp4','.mp4', 'mp3', '.mp3'}
 CHUNK_SIZE = 1024 * 1024  # decrease the value here to evaluate memory usage
-
+global fileName_g
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
@@ -128,12 +130,15 @@ def upload_file():
 
 @app.route('/download')
 def download_file():
-    path="./downloads/"+fileName_g
+    global fileName_g
+    path="./downloadsTemp/"+fileName_g
     print("FILENAME----------------------------------")
     print(fileName_g)
-    return send_file(path, as_attachment=True)
+    file = send_file(path, as_attachment=True)
+    os.remove(path)
+    return file
 
-global fileName_g
+
 @app.route('/search', methods=['GET', 'POST'])
 def search_file():
     if request.method == 'POST':
@@ -151,7 +156,9 @@ def search_file():
         print("----------------")
         print(t['File'])
         print("----------------")
-        f = open('./downloads/'+fileName_g,'wb')
+        path = "./downloadsTemp"
+        Path(path).mkdir(parents=True, exist_ok=True)
+        f = open('./downloadsTemp/'+fileName_g,'wb')
         # bytearray(b'\xff\xd8\xff\xe0')
         f.write(result.Content)
         f.close()
