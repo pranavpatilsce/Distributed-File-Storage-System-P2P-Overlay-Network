@@ -67,7 +67,9 @@ def upload_file():
         selected_files = request.files.getlist("selected_files")
         results = []
         uname = request.form["username"]
-
+        IP = request.form["IP"]
+        PORT = request.form["PORT"]
+        connectTo(IP,PORT)
         for i, file in enumerate(selected_files, 1):
             if file.filename == '':
                 flash('You must select at least one file')
@@ -99,10 +101,14 @@ def upload_file():
     <!doctype html>
     <title>Upload new File</title>
     <h1>Upload new File</h1>
+    
     <form method=post enctype=multipart/form-data>
-      <input type=file name=selected_files multiple>
-      <input type=text name=username>
-      <input type=submit value=Upload>
+        <h3>Server</h3>
+            IPv4 Address <input type=text name=IP required><br><br>
+            Port Number  <input type=text name=PORT required><br><br>
+        <input type=file name=selected_files multiple required>
+        <input type=text name=username required>
+        <input type=submit value=Upload>
     </form>
     {% if json_response %}
     <h1>Last upload</h1>
@@ -125,12 +131,12 @@ def search_file():
         uname = request.form["username"]
         fname = request.form["filename"]
         logging.info(f' Params Uname {fname} | Fname {fname}')
-        connectTo(IP,PORT)
+        # connectTo(IP,PORT)
         global stub
 
         # searchlogic
-        visited = [] # List to keep track of visited nodes.
-        queue = []     #Initialize a queue
+        visited = []    # List to keep track of visited nodes.
+        queue = []      #Initialize a queue
         queue.append(IP+':'+PORT)
         while queue:
             size = len(queue)
@@ -142,34 +148,24 @@ def search_file():
                 result = stub.Search(service.SearchRequest(Filename=fname, Username=uname))
                 results.append(MessageToJson(result))
                 visited.append(s)
+                print(result)
                 if result.found == "YES":
+                    print("HERE ", result.found)
                     break
-                for node in result.nodeConnections:
-                    queue.append(node)
                 for node in result.nodeConnections:
                     if node not in visited:
                         queue.append(node)
-
-        # result = stub.Search(service.SearchRequest(Filename=fname, Username=uname))
-        # print(result)
-        # print(result.found)
-
-
-        results.append(MessageToJson(result))
-        # print("----------------")
-        # print(json.dumps(results))
-        # print("----------------")
         return redirect(url_for('search_file', json=json.dumps(results)))  # we need a safe string to pass as url param
     return render_template_string('''
     <!doctype html>
     <title>Search File</title>
     <h1>Search File</h1>
     <form method=post>
-      <h3>Server 1 </h3>
-      IPv4 Address <input type=text name=IP><br><br>
-      Port Number <input type=text name=PORT><br><br>
-      Username <input type=text name=username><br><br>
-      Filename <input type=text name=filename><br><br>
+      <h3>Server </h3>
+      IPv4 Address <input type=text name=IP required><br><br>
+      Port Number <input type=text name=PORT required><br><br>
+      Username <input type=text name=username required><br><br>
+      Filename <input type=text name=filename required><br><br>
       <input type=submit value=Search>
     </form>
     {% if json_response %}
@@ -195,27 +191,9 @@ def config():
         PORT2 = request.form["PORT2"]
 
         connectTo(IP1, PORT1)
-        # global channel
-        # if channel!=None:
-        #     print('Closed the existing channel!')
-        #     channel.close()
-        # print('Creating Connection! ' +IP1+':'+PORT1)
-        # channel = grpc.insecure_channel(IP1+':'+PORT1)
         global stub
-        # stub = rpc.GreeterStub(channel)
-        # print("stub1", stub)
         result1 = stub.Config(service.ConfigRequest(Server=IP2+':'+PORT2 ))
         connectTo(IP2,PORT2)
-        # global channel
-        # if channel!=None:
-        #     print('Closed the existing channel!')
-        #     channel.close()
-        # print('Creating Connection! ' +IP2+':'+PORT2)
-        # channel = grpc.insecure_channel(IP2+':'+PORT2)
-        # # global stub
-        # stub = rpc.GreeterStub(channel)
-        # global stub
-        # print(stub)
         result2 = stub.Config(service.ConfigRequest(Server=IP1+':'+PORT1 ))
 
         logging.info(f' Server1 Params IP {IP1} | PORT {PORT1}')
@@ -232,11 +210,11 @@ def config():
     <h1>Connect to a Node</h1>
     <form method=post>
         <h3>Server 1 </h3>
-      IPv4 Address: <input type=text name=IP1><br><br>
-      Port Number:<input type=text name=PORT1><br>
+      IPv4 Address: <input type=text name=IP1 required><br><br>
+      Port Number:  <input type=text name=PORT1 required><br>
       <h3>Server 2 </h3>
-      IPv4 Address: <input type=text name=IP2><br><br>
-      Port Number:<input type=text name=PORT2><br>
+      IPv4 Address: <input type=text name=IP2 required><br><br>
+      Port Number:  <input type=text name=PORT2 required><br><br>
       <input type=submit value=Connect>
     </form>
     {% if json_response %}
