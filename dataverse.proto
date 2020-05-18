@@ -35,6 +35,7 @@ message SearchRequest {
 
 message SearchResponse {
   string found = 1;
+  repeated string nodeConnections = 2;
 }
 
 message ConfigRequest {

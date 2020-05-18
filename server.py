@@ -63,7 +63,8 @@ class ImageServiceServer(rpc.GreeterServicer):  # inheriting here from the proto
         print(cache)
         if(file in cache):
             return service.SearchResponse(found="YES")
-        return service.SearchResponse(found="NO")
+        print("connectedHosts ",connectedHosts)
+        return service.SearchResponse(found="NO", nodeConnections=connectedHosts)
 
     def Config(self, request, context):
         print(request)
