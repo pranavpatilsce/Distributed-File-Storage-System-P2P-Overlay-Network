@@ -28,6 +28,11 @@ class GreeterStub(object):
                 request_serializer=dataverse__pb2.ConfigRequest.SerializeToString,
                 response_deserializer=dataverse__pb2.ConfigResponse.FromString,
                 )
+        self.Relocate = channel.unary_unary(
+                '/Greeter/Relocate',
+                request_serializer=dataverse__pb2.RelocateRequest.SerializeToString,
+                response_deserializer=dataverse__pb2.RelocateResponse.FromString,
+                )
 
 
 class GreeterServicer(object):
@@ -51,6 +56,12 @@ class GreeterServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def Relocate(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_GreeterServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -68,6 +79,11 @@ def add_GreeterServicer_to_server(servicer, server):
                     servicer.Config,
                     request_deserializer=dataverse__pb2.ConfigRequest.FromString,
                     response_serializer=dataverse__pb2.ConfigResponse.SerializeToString,
+            ),
+            'Relocate': grpc.unary_unary_rpc_method_handler(
+                    servicer.Relocate,
+                    request_deserializer=dataverse__pb2.RelocateRequest.FromString,
+                    response_serializer=dataverse__pb2.RelocateResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -124,5 +140,21 @@ class Greeter(object):
         return grpc.experimental.unary_unary(request, target, '/Greeter/Config',
             dataverse__pb2.ConfigRequest.SerializeToString,
             dataverse__pb2.ConfigResponse.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Relocate(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Greeter/Relocate',
+            dataverse__pb2.RelocateRequest.SerializeToString,
+            dataverse__pb2.RelocateResponse.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)

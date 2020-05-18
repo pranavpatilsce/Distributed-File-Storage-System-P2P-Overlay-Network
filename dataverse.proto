@@ -4,14 +4,24 @@ service Greeter {
   rpc Upload (stream ImageUploadRequest) returns (ImageUploadResponse) {};
   rpc Search (SearchRequest) returns (SearchResponse){};
   rpc Config (ConfigRequest) returns (ConfigResponse){};
+  rpc Relocate (RelocateRequest) returns (RelocateResponse){};
 }
-
 
 enum ImageUploadStatusCode {
   Ok = 0;
   Failed = 1;
   Unknown = 2;
   InProgress = 3;
+}
+
+message RelocateRequest{
+  bytes Content = 1;
+  string Filename = 2;
+  string Username = 3;
+}
+
+message RelocateResponse{
+  string status = 1;
 }
 
 message ImageUploadRequest {

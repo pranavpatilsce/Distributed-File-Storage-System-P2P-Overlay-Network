@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x0f\x64\x61taverse.proto\"o\n\x12ImageUploadRequest\x12\x0f\n\x07\x43ontent\x18\x01 \x01(\x0c\x12\n\n\x02Id\x18\x02 \x01(\t\x12*\n\nStatusCode\x18\x03 \x01(\x0e\x32\x16.ImageUploadStatusCode\x12\x10\n\x08Username\x18\x04 \x01(\t\"\x89\x01\n\x13ImageUploadResponse\x12\n\n\x02Id\x18\x01 \x01(\t\x12*\n\nStatusCode\x18\x02 \x01(\x0e\x32\x16.ImageUploadStatusCode\x12\x0f\n\x07Message\x18\x03 \x01(\t\x12\x10\n\x08Username\x18\x04 \x01(\t\x12\x17\n\x0fnodeConnections\x18\x05 \x03(\t\"3\n\rSearchRequest\x12\x10\n\x08\x46ilename\x18\x01 \x01(\t\x12\x10\n\x08Username\x18\x02 \x01(\t\"W\n\x0eSearchResponse\x12\r\n\x05\x66ound\x18\x01 \x01(\t\x12\x17\n\x0fnodeConnections\x18\x02 \x03(\t\x12\x0f\n\x07\x43ontent\x18\x03 \x01(\x0c\x12\x0c\n\x04\x46ile\x18\x04 \x01(\t\"\x1f\n\rConfigRequest\x12\x0e\n\x06Server\x18\x01 \x01(\t\" \n\x0e\x43onfigResponse\x12\x0e\n\x06Status\x18\x01 \x01(\t*H\n\x15ImageUploadStatusCode\x12\x06\n\x02Ok\x10\x00\x12\n\n\x06\x46\x61iled\x10\x01\x12\x0b\n\x07Unknown\x10\x02\x12\x0e\n\nInProgress\x10\x03\x32\x9c\x01\n\x07Greeter\x12\x37\n\x06Upload\x12\x13.ImageUploadRequest\x1a\x14.ImageUploadResponse\"\x00(\x01\x12+\n\x06Search\x12\x0e.SearchRequest\x1a\x0f.SearchResponse\"\x00\x12+\n\x06\x43onfig\x12\x0e.ConfigRequest\x1a\x0f.ConfigResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x0f\x64\x61taverse.proto\"F\n\x0fRelocateRequest\x12\x0f\n\x07\x43ontent\x18\x01 \x01(\x0c\x12\x10\n\x08\x46ilename\x18\x02 \x01(\t\x12\x10\n\x08Username\x18\x03 \x01(\t\"\"\n\x10RelocateResponse\x12\x0e\n\x06status\x18\x01 \x01(\t\"o\n\x12ImageUploadRequest\x12\x0f\n\x07\x43ontent\x18\x01 \x01(\x0c\x12\n\n\x02Id\x18\x02 \x01(\t\x12*\n\nStatusCode\x18\x03 \x01(\x0e\x32\x16.ImageUploadStatusCode\x12\x10\n\x08Username\x18\x04 \x01(\t\"\x89\x01\n\x13ImageUploadResponse\x12\n\n\x02Id\x18\x01 \x01(\t\x12*\n\nStatusCode\x18\x02 \x01(\x0e\x32\x16.ImageUploadStatusCode\x12\x0f\n\x07Message\x18\x03 \x01(\t\x12\x10\n\x08Username\x18\x04 \x01(\t\x12\x17\n\x0fnodeConnections\x18\x05 \x03(\t\"3\n\rSearchRequest\x12\x10\n\x08\x46ilename\x18\x01 \x01(\t\x12\x10\n\x08Username\x18\x02 \x01(\t\"W\n\x0eSearchResponse\x12\r\n\x05\x66ound\x18\x01 \x01(\t\x12\x17\n\x0fnodeConnections\x18\x02 \x03(\t\x12\x0f\n\x07\x43ontent\x18\x03 \x01(\x0c\x12\x0c\n\x04\x46ile\x18\x04 \x01(\t\"\x1f\n\rConfigRequest\x12\x0e\n\x06Server\x18\x01 \x01(\t\" \n\x0e\x43onfigResponse\x12\x0e\n\x06Status\x18\x01 \x01(\t*H\n\x15ImageUploadStatusCode\x12\x06\n\x02Ok\x10\x00\x12\n\n\x06\x46\x61iled\x10\x01\x12\x0b\n\x07Unknown\x10\x02\x12\x0e\n\nInProgress\x10\x03\x32\xcf\x01\n\x07Greeter\x12\x37\n\x06Upload\x12\x13.ImageUploadRequest\x1a\x14.ImageUploadResponse\"\x00(\x01\x12+\n\x06Search\x12\x0e.SearchRequest\x1a\x0f.SearchResponse\"\x00\x12+\n\x06\x43onfig\x12\x0e.ConfigRequest\x1a\x0f.ConfigResponse\"\x00\x12\x31\n\x08Relocate\x12\x10.RelocateRequest\x1a\x11.RelocateResponse\"\x00\x62\x06proto3'
 )
 
 _IMAGEUPLOADSTATUSCODE = _descriptor.EnumDescriptor(
@@ -47,8 +47,8 @@ _IMAGEUPLOADSTATUSCODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=481,
-  serialized_end=553,
+  serialized_start=589,
+  serialized_end=661,
 )
 _sym_db.RegisterEnumDescriptor(_IMAGEUPLOADSTATUSCODE)
 
@@ -58,6 +58,82 @@ Failed = 1
 Unknown = 2
 InProgress = 3
 
+
+
+_RELOCATEREQUEST = _descriptor.Descriptor(
+  name='RelocateRequest',
+  full_name='RelocateRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='Content', full_name='RelocateRequest.Content', index=0,
+      number=1, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='Filename', full_name='RelocateRequest.Filename', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='Username', full_name='RelocateRequest.Username', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=19,
+  serialized_end=89,
+)
+
+
+_RELOCATERESPONSE = _descriptor.Descriptor(
+  name='RelocateResponse',
+  full_name='RelocateResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='status', full_name='RelocateResponse.status', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=91,
+  serialized_end=125,
+)
 
 
 _IMAGEUPLOADREQUEST = _descriptor.Descriptor(
@@ -107,8 +183,8 @@ _IMAGEUPLOADREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19,
-  serialized_end=130,
+  serialized_start=127,
+  serialized_end=238,
 )
 
 
@@ -166,8 +242,8 @@ _IMAGEUPLOADRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=133,
-  serialized_end=270,
+  serialized_start=241,
+  serialized_end=378,
 )
 
 
@@ -204,8 +280,8 @@ _SEARCHREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=272,
-  serialized_end=323,
+  serialized_start=380,
+  serialized_end=431,
 )
 
 
@@ -256,8 +332,8 @@ _SEARCHRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=325,
-  serialized_end=412,
+  serialized_start=433,
+  serialized_end=520,
 )
 
 
@@ -287,8 +363,8 @@ _CONFIGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=414,
-  serialized_end=445,
+  serialized_start=522,
+  serialized_end=553,
 )
 
 
@@ -318,12 +394,14 @@ _CONFIGRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=447,
-  serialized_end=479,
+  serialized_start=555,
+  serialized_end=587,
 )
 
 _IMAGEUPLOADREQUEST.fields_by_name['StatusCode'].enum_type = _IMAGEUPLOADSTATUSCODE
 _IMAGEUPLOADRESPONSE.fields_by_name['StatusCode'].enum_type = _IMAGEUPLOADSTATUSCODE
+DESCRIPTOR.message_types_by_name['RelocateRequest'] = _RELOCATEREQUEST
+DESCRIPTOR.message_types_by_name['RelocateResponse'] = _RELOCATERESPONSE
 DESCRIPTOR.message_types_by_name['ImageUploadRequest'] = _IMAGEUPLOADREQUEST
 DESCRIPTOR.message_types_by_name['ImageUploadResponse'] = _IMAGEUPLOADRESPONSE
 DESCRIPTOR.message_types_by_name['SearchRequest'] = _SEARCHREQUEST
@@ -332,6 +410,20 @@ DESCRIPTOR.message_types_by_name['ConfigRequest'] = _CONFIGREQUEST
 DESCRIPTOR.message_types_by_name['ConfigResponse'] = _CONFIGRESPONSE
 DESCRIPTOR.enum_types_by_name['ImageUploadStatusCode'] = _IMAGEUPLOADSTATUSCODE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
+
+RelocateRequest = _reflection.GeneratedProtocolMessageType('RelocateRequest', (_message.Message,), {
+  'DESCRIPTOR' : _RELOCATEREQUEST,
+  '__module__' : 'dataverse_pb2'
+  # @@protoc_insertion_point(class_scope:RelocateRequest)
+  })
+_sym_db.RegisterMessage(RelocateRequest)
+
+RelocateResponse = _reflection.GeneratedProtocolMessageType('RelocateResponse', (_message.Message,), {
+  'DESCRIPTOR' : _RELOCATERESPONSE,
+  '__module__' : 'dataverse_pb2'
+  # @@protoc_insertion_point(class_scope:RelocateResponse)
+  })
+_sym_db.RegisterMessage(RelocateResponse)
 
 ImageUploadRequest = _reflection.GeneratedProtocolMessageType('ImageUploadRequest', (_message.Message,), {
   'DESCRIPTOR' : _IMAGEUPLOADREQUEST,
@@ -383,8 +475,8 @@ _GREETER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=556,
-  serialized_end=712,
+  serialized_start=664,
+  serialized_end=871,
   methods=[
   _descriptor.MethodDescriptor(
     name='Upload',
@@ -411,6 +503,15 @@ _GREETER = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_CONFIGREQUEST,
     output_type=_CONFIGRESPONSE,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='Relocate',
+    full_name='Greeter.Relocate',
+    index=3,
+    containing_service=None,
+    input_type=_RELOCATEREQUEST,
+    output_type=_RELOCATERESPONSE,
     serialized_options=None,
   ),
 ])
