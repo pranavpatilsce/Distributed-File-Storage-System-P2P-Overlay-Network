@@ -23,6 +23,15 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+@app.after_request
+def add_header(r):
+    """
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    return r
+
 @app.template_filter('json_loads')
 def json_loads_filter(s):
     return json.loads(s) if s else None
@@ -119,7 +128,6 @@ def upload_file():
 
 @app.route('/download')
 def download_file():
-    global fileName_g
     path="./downloads/"+fileName_g
     print("FILENAME----------------------------------")
     print(fileName_g)
@@ -138,7 +146,6 @@ def search_file():
         results.append(MessageToJson(result))
         t = json.loads(results[0])
         print( type(t))
-        
         global fileName_g
         fileName_g = t['File']
         print("----------------")
@@ -149,7 +156,7 @@ def search_file():
         f.write(result.Content)
         f.close()
 
-        return redirect(url_for('search_file', json=json.dumps(results)))  # we need a safe string to pass as url param
+        return redirect(url_for('search_file', json=json.dumps("{'bar': ('baz', None, 1.0, 2)}" )))  # we need a safe string to pass as url param
     return render_template_string('''
     <!doctype html>
     <title>Search File</title>
@@ -159,18 +166,8 @@ def search_file():
       Filename<input type=text name=filename><br>
       <input type=submit value=Search>
     </form>
-    {% if json_response %}
-    <h1>Files Found</h1>
-    <ol>
-    {% for item in (json_response|json_loads) %}
-    <a href="/download">Download</a>
-    <li>
-        {{ (item|json_loads) }}
-    </li>
-    {% endfor %}
-    </ol>
-    {% endif %}
-    ''', json_response=request.args.get('json'))
+    <a href = "/download">Download</a>
+    ''', json_response="dummy")
 
 @app.route('/config', methods=['GET', 'POST'])
 def config():
