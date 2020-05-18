@@ -113,7 +113,7 @@ def upload_file():
     <!doctype html>
     <title>Upload new File</title>
     <h1>Upload new File</h1>
-    
+
     <form method=post enctype=multipart/form-data>
         <h3>Server</h3>
             IPv4 Address <input type=text name=IP required><br><br>
@@ -165,8 +165,8 @@ def search_file():
         while queue:
             size = len(queue)
             for i in range (size):
-                s = queue.pop(0) 
-                print (s, end = " ") 
+                s = queue.pop(0)
+                print (s, end = " ")
                 arr = s.split(":")
                 connectTo(arr[0],arr[1])
                 result = stub.Search(service.SearchRequest(Filename=fname, Username=uname))
@@ -184,7 +184,7 @@ def search_file():
         logging.info(f' Params Uname {uname} | Fname {fname}')
         #results.append(MessageToJson(result))
         t = json.loads(results[len(results) - 1])
-        print( type(t))
+        print("187", t)
         global fileName_g
         fileName_g = t['File']
         print("----------------")
@@ -217,7 +217,7 @@ def search_file():
 def config():
     if request.method == 'POST':
         results = []
-        
+
         IP1 = request.form["IP1"]
         PORT1 = request.form["PORT1"]
         IP2 = request.form["IP2"]
