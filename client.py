@@ -13,7 +13,7 @@ from google.protobuf.json_format import MessageToJson
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', '.gif','mp4','.mp4', 'mp3', '.mp3'}
 CHUNK_SIZE = 1024 * 1024  # decrease the value here to evaluate memory usage
-global fileName_g
+fileName_g = None
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
@@ -38,37 +38,6 @@ def add_header(r):
 def json_loads_filter(s):
     return json.loads(s) if s else None
 
-@app.route('/selectServer', methods=['GET','POST'])
-def selectServer():
-    if request.method == 'POST':
-        serverip = request.form["serverip"]
-        serverport = request.form["serverport"]
-        print('serverip is'+serverip)
-        global channel
-        if channel!=None:
-            print('Channel connection exists!')
-            channel.close()
-        print('Creating Connection!')
-        channel = grpc.insecure_channel(serverip+':'+serverport)
-        global stub
-        stub = rpc.GreeterStub(channel)
-        print(stub)
-        logging.info('Connection to'+serverip+':'+serverport+' created successfully')
-        return 'Connection to '+serverip+':'+serverport+' created successfully' # we need a safe string to pass as url param
-    return render_template_string('''
-    <!doctype html>
-    <title>Select Server</title>
-    <h1>Select Server</h1>
-    <form method=post enctype=multipart/form-data>
-      Enter Server IP: <input type=text name=serverip>
-      Enter Server Port: <input type=text name=serverport>
-      <input type=submit value=Select>
-    </form>
-    {% if json_response %}
-    <h1>Client connected with the server</h1>
-    {% endif %}
-    ''', json_response=request.args.get('json'))
-
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
@@ -91,6 +60,7 @@ def upload_file():
 
                 def upload_request_generator():  # this generates our grpc `stream ImageUploadRequest`
                     i = 1
+                    print(file)
                     # username = request.form.get("username")
                     # logging.info(f'{request}')
                     while True:
@@ -103,6 +73,7 @@ def upload_file():
 
                         yield result
                         if not b:
+                            file.seek(0)
                             break
                 global stub
                 output_result = stub.Upload(upload_request_generator())
@@ -110,7 +81,6 @@ def upload_file():
                     arr = output_result.nodeConnections[0].split(":")
                     connectTo(arr[0],arr[1])
                     replicate = stub.Upload(upload_request_generator())
-                    print(replicate)
                 logging.info(f'file {i} {file.name} was upload successfully')
                 results.append(MessageToJson(output_result))
         return redirect(url_for('upload_file', json=json.dumps(results)))  # we need a safe string to pass as url param
