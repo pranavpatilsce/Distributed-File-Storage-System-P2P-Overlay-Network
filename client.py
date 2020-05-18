@@ -105,9 +105,14 @@ def upload_file():
                         if not b:
                             break
                 global stub
-                result = stub.Upload(upload_request_generator())
+                output_result = stub.Upload(upload_request_generator())
+                if output_result.nodeConnections:
+                    arr = output_result.nodeConnections[0].split(":")
+                    connectTo(arr[0],arr[1])
+                    replicate = stub.Upload(upload_request_generator())
+                    print(replicate)
                 logging.info(f'file {i} {file.name} was upload successfully')
-                results.append(MessageToJson(result))
+                results.append(MessageToJson(output_result))
         return redirect(url_for('upload_file', json=json.dumps(results)))  # we need a safe string to pass as url param
     return render_template_string('''
     <!doctype html>

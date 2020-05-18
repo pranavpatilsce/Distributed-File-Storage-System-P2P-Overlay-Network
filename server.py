@@ -54,7 +54,7 @@ class ImageServiceServer(rpc.GreeterServicer):  # inheriting here from the proto
 
                 logging.info(f'> Username - {request.Username}')
                 logging.info(f'> {request.Id} - returning status')
-                result = service.ImageUploadResponse(Id=request.Id, StatusCode=service.ImageUploadStatusCode.Ok, Message="Uploaded", Username=request.Username)
+                result = service.ImageUploadResponse(Id=request.Id, StatusCode=service.ImageUploadStatusCode.Ok, Message="Uploaded", Username=request.Username, nodeConnections=connectedHosts)
                 return result
 
     def Search(self, request, context):

@@ -26,6 +26,7 @@ message ImageUploadResponse {
   ImageUploadStatusCode StatusCode = 2;
   string Message = 3;
   string Username = 4;
+  repeated string nodeConnections = 5;
 }
 
 message SearchRequest {
