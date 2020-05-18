@@ -2,8 +2,10 @@ import uuid
 import datetime
 import logging
 import json
-from flask import Flask, flash, request, redirect, url_for, render_template_string
+from flask import Flask, flash, request, redirect, url_for, render_template_string, send_file
 
+from pathlib import Path
+import os
 import grpc
 import dataverse_pb2 as service
 import dataverse_pb2_grpc as rpc
@@ -11,7 +13,7 @@ from google.protobuf.json_format import MessageToJson
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', '.gif','mp4','.mp4', 'mp3', '.mp3'}
 CHUNK_SIZE = 1024 * 1024  # decrease the value here to evaluate memory usage
-
+global fileName_g
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
@@ -22,6 +24,15 @@ channel = None
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.after_request
+def add_header(r):
+    """
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    return r
 
 @app.template_filter('json_loads')
 def json_loads_filter(s):
@@ -87,6 +98,7 @@ def upload_file():
                         if b:
                             result = service.ImageUploadRequest(Content=b, Id=file.filename, StatusCode=service.ImageUploadStatusCode.InProgress, Username=uname)  # noqa
                         else:
+
                             result = service.ImageUploadRequest(Id=file.filename, StatusCode=service.ImageUploadStatusCode.Ok, Username=uname)  # noqa
 
                         yield result
@@ -122,6 +134,17 @@ def upload_file():
     {% endif %}
     ''', json_response=request.args.get('json'))
 
+@app.route('/download')
+def download_file():
+    global fileName_g
+    path="./downloadsTemp/"+fileName_g
+    print("FILENAME----------------------------------")
+    print(fileName_g)
+    file = send_file(path, as_attachment=True)
+    os.remove(path)
+    return file
+
+
 @app.route('/search', methods=['GET', 'POST'])
 def search_file():
     if request.method == 'POST':
@@ -130,6 +153,7 @@ def search_file():
         PORT = request.form["PORT"]
         uname = request.form["username"]
         fname = request.form["filename"]
+
         logging.info(f' Params Uname {fname} | Fname {fname}')
         # connectTo(IP,PORT)
         global stub
@@ -155,7 +179,25 @@ def search_file():
                 for node in result.nodeConnections:
                     if node not in visited:
                         queue.append(node)
-        return redirect(url_for('search_file', json=json.dumps(results)))  # we need a safe string to pass as url param
+
+        #result = stub.Search(service.SearchRequest(Filename=fname, Username=uname))
+        logging.info(f' Params Uname {uname} | Fname {fname}')
+        #results.append(MessageToJson(result))
+        t = json.loads(results[len(results) - 1])
+        print( type(t))
+        global fileName_g
+        fileName_g = t['File']
+        print("----------------")
+        print(t['File'])
+        print("----------------")
+        path = "./downloadsTemp"
+        Path(path).mkdir(parents=True, exist_ok=True)
+        f = open('./downloadsTemp/'+fileName_g,'wb')
+        # bytearray(b'\xff\xd8\xff\xe0')
+        f.write(result.Content)
+        f.close()
+
+        return redirect(url_for('search_file', json=json.dumps("{'bar': ('baz', None, 1.0, 2)}" )))  # we need a safe string to pass as url param
     return render_template_string('''
     <!doctype html>
     <title>Search File</title>
@@ -168,17 +210,8 @@ def search_file():
       Filename <input type=text name=filename required><br><br>
       <input type=submit value=Search>
     </form>
-    {% if json_response %}
-    <h1>Files Found</h1>
-    <ol>
-    {% for item in (json_response|json_loads) %}
-    <li>
-        {{ (item|json_loads) }}
-    </li>
-    {% endfor %}
-    </ol>
-    {% endif %}
-    ''', json_response=request.args.get('json'))
+    <a href = "/download">Download</a>
+    ''', json_response="dummy")
 
 @app.route('/config', methods=['GET', 'POST'])
 def config():
@@ -241,4 +274,4 @@ def connectTo(serverip, serverport):
 
 if __name__ == "__main__":
     print('hellllllllllllllllladkjashdjhasjdkhasjdhjaskdhjk')
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', port = 5001, debug=True)

@@ -49,6 +49,8 @@ _IMAGEUPLOADSTATUSCODE = _descriptor.EnumDescriptor(
   serialized_options=None,
   serialized_start=424,
   serialized_end=496,
+  serialized_start=430,
+  serialized_end=502,
 )
 _sym_db.RegisterEnumDescriptor(_IMAGEUPLOADSTATUSCODE)
 
@@ -220,6 +222,16 @@ _SEARCHRESPONSE = _descriptor.Descriptor(
       name='nodeConnections', full_name='SearchResponse.nodeConnections', index=1,
       number=2, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
+      name='Content', full_name='SearchResponse.Content', index=1,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='File', full_name='SearchResponse.File', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -237,6 +249,7 @@ _SEARCHRESPONSE = _descriptor.Descriptor(
   ],
   serialized_start=299,
   serialized_end=355,
+  serialized_end=361,
 )
 
 
@@ -268,6 +281,8 @@ _CONFIGREQUEST = _descriptor.Descriptor(
   ],
   serialized_start=357,
   serialized_end=388,
+  serialized_start=363,
+  serialized_end=394,
 )
 
 
@@ -299,6 +314,8 @@ _CONFIGRESPONSE = _descriptor.Descriptor(
   ],
   serialized_start=390,
   serialized_end=422,
+  serialized_start=396,
+  serialized_end=428,
 )
 
 _IMAGEUPLOADREQUEST.fields_by_name['StatusCode'].enum_type = _IMAGEUPLOADSTATUSCODE
@@ -364,6 +381,8 @@ _GREETER = _descriptor.ServiceDescriptor(
   serialized_options=None,
   serialized_start=499,
   serialized_end=655,
+  serialized_start=505,
+  serialized_end=661,
   methods=[
   _descriptor.MethodDescriptor(
     name='Upload',

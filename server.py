@@ -45,6 +45,9 @@ class ImageServiceServer(rpc.GreeterServicer):  # inheriting here from the proto
                 f = open(file,'wb')
                 f.write(image)
                 f.close()
+                print("-------------------------")
+                print(image)
+                print("-------------------------")
                 logging.info(f'> {request.Id} - deleting image from mem')
                 del self.images[request.Id]
                 cache.add(file)
@@ -59,11 +62,16 @@ class ImageServiceServer(rpc.GreeterServicer):  # inheriting here from the proto
         uname = request.Username
         fname = request.Filename
         file = './data/'+uname +'/'+fname
-        print(file)
-        print(cache)
+        # print(file)
+        # print(cache)
         if(file in cache):
             return service.SearchResponse(found="YES")
-        print("connectedHosts ",connectedHosts)
+            logging.info(f'> {file} found')
+            with open(file, 'rb') as content_file:
+                content = content_file.read()
+                print(type(content))
+            return service.SearchResponse(found="YES", Content = content, File = fname)
+        print("connectedHosts ", connectedHosts)
         return service.SearchResponse(found="NO", nodeConnections=connectedHosts)
 
     def Config(self, request, context):

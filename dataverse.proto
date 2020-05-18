@@ -36,6 +36,8 @@ message SearchRequest {
 message SearchResponse {
   string found = 1;
   repeated string nodeConnections = 2;
+  bytes Content = 3;
+  string File = 4;
 }
 
 message ConfigRequest {
