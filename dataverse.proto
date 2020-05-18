@@ -35,6 +35,8 @@ message SearchRequest {
 
 message SearchResponse {
   string found = 1;
+  bytes Content = 2;
+  string File = 3;
 }
 
 message ConfigRequest {

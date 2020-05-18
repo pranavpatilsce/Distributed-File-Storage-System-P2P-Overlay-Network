@@ -2,7 +2,7 @@ import uuid
 import datetime
 import logging
 import json
-from flask import Flask, flash, request, redirect, url_for, render_template_string
+from flask import Flask, flash, request, redirect, url_for, render_template_string, send_file
 
 import grpc
 import dataverse_pb2 as service
@@ -85,6 +85,7 @@ def upload_file():
                         if b:
                             result = service.ImageUploadRequest(Content=b, Id=file.filename, StatusCode=service.ImageUploadStatusCode.InProgress, Username=uname)  # noqa
                         else:
+
                             result = service.ImageUploadRequest(Id=file.filename, StatusCode=service.ImageUploadStatusCode.Ok, Username=uname)  # noqa
 
                         yield result
@@ -116,6 +117,15 @@ def upload_file():
     {% endif %}
     ''', json_response=request.args.get('json'))
 
+@app.route('/download')
+def download_file():
+    global fileName_g
+    path="./downloads/"+fileName_g
+    print("FILENAME----------------------------------")
+    print(fileName_g)
+    return send_file(path, as_attachment=True)
+
+global fileName_g
 @app.route('/search', methods=['GET', 'POST'])
 def search_file():
     if request.method == 'POST':
@@ -124,11 +134,21 @@ def search_file():
         fname = request.form["filename"]
         global stub
         result = stub.Search(service.SearchRequest(Filename=fname, Username=uname))
-        logging.info(f' Params Uname {fname} | Fname {fname}')
+        logging.info(f' Params Uname {uname} | Fname {fname}')
         results.append(MessageToJson(result))
-        # print("----------------")
-        # print(json.dumps(results))
-        # print("----------------")
+        t = json.loads(results[0])
+        print( type(t))
+        
+        global fileName_g
+        fileName_g = t['File']
+        print("----------------")
+        print(t['File'])
+        print("----------------")
+        f = open('./downloads/'+fileName_g,'wb')
+        # bytearray(b'\xff\xd8\xff\xe0')
+        f.write(result.Content)
+        f.close()
+
         return redirect(url_for('search_file', json=json.dumps(results)))  # we need a safe string to pass as url param
     return render_template_string('''
     <!doctype html>
@@ -143,6 +163,7 @@ def search_file():
     <h1>Files Found</h1>
     <ol>
     {% for item in (json_response|json_loads) %}
+    <a href="/download">Download</a>
     <li>
         {{ (item|json_loads) }}
     </li>
@@ -188,4 +209,4 @@ def config():
 
 if __name__ == "__main__":
     print('hellllllllllllllllladkjashdjhasjdkhasjdhjaskdhjk')
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', port = 5001, debug=True)
