@@ -65,7 +65,7 @@ class ImageServiceServer(rpc.GreeterServicer):  # inheriting here from the proto
         # print(file)
         # print(cache)
         if(file in cache):
-            return service.SearchResponse(found="YES")
+            # return service.SearchResponse(found="YES")
             logging.info(f'> {file} found')
             with open(file, 'rb') as content_file:
                 content = content_file.read()

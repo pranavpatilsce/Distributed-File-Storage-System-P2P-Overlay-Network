@@ -1,6 +1,2 @@
-./data/kk/download.jpeg
-./data/temp/download.jpeg
-./data/aditya/download.jpeg
-./data/manav/download.jpeg
-./data/manav/vid.mp4
 ./data/temp/vid.mp4
+./data/temp/download.jpeg
