@@ -24,3 +24,5 @@ hs_err_pid*
 
 __pycache__/
 data/
+
+cache.txt
