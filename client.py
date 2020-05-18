@@ -78,7 +78,9 @@ def upload_file():
         selected_files = request.files.getlist("selected_files")
         results = []
         uname = request.form["username"]
-
+        IP = request.form["IP"]
+        PORT = request.form["PORT"]
+        connectTo(IP,PORT)
         for i, file in enumerate(selected_files, 1):
             if file.filename == '':
                 flash('You must select at least one file')
@@ -111,10 +113,14 @@ def upload_file():
     <!doctype html>
     <title>Upload new File</title>
     <h1>Upload new File</h1>
+    
     <form method=post enctype=multipart/form-data>
-      <input type=file name=selected_files multiple>
-      <input type=text name=username>
-      <input type=submit value=Upload>
+        <h3>Server</h3>
+            IPv4 Address <input type=text name=IP required><br><br>
+            Port Number  <input type=text name=PORT required><br><br>
+        <input type=file name=selected_files multiple required>
+        <input type=text name=username required>
+        <input type=submit value=Upload>
     </form>
     {% if json_response %}
     <h1>Last upload</h1>
@@ -143,13 +149,41 @@ def download_file():
 def search_file():
     if request.method == 'POST':
         results = []
+        IP = request.form["IP"]
+        PORT = request.form["PORT"]
         uname = request.form["username"]
         fname = request.form["filename"]
+
+        logging.info(f' Params Uname {fname} | Fname {fname}')
+        # connectTo(IP,PORT)
         global stub
-        result = stub.Search(service.SearchRequest(Filename=fname, Username=uname))
+
+        # searchlogic
+        visited = []    # List to keep track of visited nodes.
+        queue = []      #Initialize a queue
+        queue.append(IP+':'+PORT)
+        while queue:
+            size = len(queue)
+            for i in range (size):
+                s = queue.pop(0) 
+                print (s, end = " ") 
+                arr = s.split(":")
+                connectTo(arr[0],arr[1])
+                result = stub.Search(service.SearchRequest(Filename=fname, Username=uname))
+                results.append(MessageToJson(result))
+                visited.append(s)
+                print(result)
+                if result.found == "YES":
+                    print("HERE ", result.found)
+                    break
+                for node in result.nodeConnections:
+                    if node not in visited:
+                        queue.append(node)
+
+        #result = stub.Search(service.SearchRequest(Filename=fname, Username=uname))
         logging.info(f' Params Uname {uname} | Fname {fname}')
-        results.append(MessageToJson(result))
-        t = json.loads(results[0])
+        #results.append(MessageToJson(result))
+        t = json.loads(results[len(results) - 1])
         print( type(t))
         global fileName_g
         fileName_g = t['File']
@@ -169,8 +203,11 @@ def search_file():
     <title>Search File</title>
     <h1>Search File</h1>
     <form method=post>
-      Username<input type=text name=username><br>
-      Filename<input type=text name=filename><br>
+      <h3>Server </h3>
+      IPv4 Address <input type=text name=IP required><br><br>
+      Port Number <input type=text name=PORT required><br><br>
+      Username <input type=text name=username required><br><br>
+      Filename <input type=text name=filename required><br><br>
       <input type=submit value=Search>
     </form>
     <a href = "/download">Download</a>
@@ -180,12 +217,22 @@ def search_file():
 def config():
     if request.method == 'POST':
         results = []
-        IP = request.form["IP"]
-        PORT = request.form["PORT"]
+        
+        IP1 = request.form["IP1"]
+        PORT1 = request.form["PORT1"]
+        IP2 = request.form["IP2"]
+        PORT2 = request.form["PORT2"]
+
+        connectTo(IP1, PORT1)
         global stub
-        result = stub.Config(service.ConfigRequest(Server=IP+':'+PORT))
-        logging.info(f' Params IP {IP} | PORT {PORT}')
-        results.append(MessageToJson(result))
+        result1 = stub.Config(service.ConfigRequest(Server=IP2+':'+PORT2 ))
+        connectTo(IP2,PORT2)
+        result2 = stub.Config(service.ConfigRequest(Server=IP1+':'+PORT1 ))
+
+        logging.info(f' Server1 Params IP {IP1} | PORT {PORT1}')
+        logging.info(f' Server2 Params IP {IP2} | PORT {PORT2}')
+        results.append(MessageToJson(result1))
+        results.append(MessageToJson(result2))
         print("----------------")
         print(json.dumps(results))
         print("----------------")
@@ -195,8 +242,12 @@ def config():
     <title>Connect to a Node</title>
     <h1>Connect to a Node</h1>
     <form method=post>
-      IPv4 Address: <input type=text name=IP><br>
-      Port Number:<input type=text name=PORT><br>
+        <h3>Server 1 </h3>
+      IPv4 Address: <input type=text name=IP1 required><br><br>
+      Port Number:  <input type=text name=PORT1 required><br>
+      <h3>Server 2 </h3>
+      IPv4 Address: <input type=text name=IP2 required><br><br>
+      Port Number:  <input type=text name=PORT2 required><br><br>
       <input type=submit value=Connect>
     </form>
     {% if json_response %}
@@ -210,6 +261,16 @@ def config():
     </ol>
     {% endif %}
     ''', json_response=request.args.get('json'))
+
+def connectTo(serverip, serverport):
+    global channel
+    if channel!=None:
+        print('Closed the existing channel!')
+        channel.close()
+    print('Creating Connection! ' +serverip+':'+serverport)
+    channel = grpc.insecure_channel(serverip+':'+serverport)
+    global stub
+    stub = rpc.GreeterStub(channel)
 
 if __name__ == "__main__":
     print('hellllllllllllllllladkjashdjhasjdkhasjdhjaskdhjk')
