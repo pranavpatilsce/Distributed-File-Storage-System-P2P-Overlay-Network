@@ -1,4 +1,0 @@
-./data/temp2/music.mp3
-./data/temp1/music.mp3
-./data/temp/vid.mp4
-./data/temp/download.jpeg
