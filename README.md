@@ -8,5 +8,5 @@ This project can stream audio, video, and image files from client to server via 
 2. Then type `source bin/activate`
 3. Open another terminal window and do steps 1 and 2 again in the directory
 4. In the 1st terminal window: python ../server.py which will launch the server.
-5. In the 2nd terminal window: python ../client.py which will launch the client at localhost:5000
+5. In the 2nd terminal window: python ../client.py which will launch the client at localhost:5001
 6. The server port is `22222` and use `localhost` running of the project on localhost.
