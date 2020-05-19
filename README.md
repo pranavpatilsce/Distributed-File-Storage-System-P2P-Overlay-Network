@@ -3,7 +3,7 @@
 This project can stream audio, video, and image files from client to server via gRPC. The main goal of the project is to build an overlay network.
 
 ### Operation
-0. You will have to generate the proto files using proto.sh. You can also run the project Makefile. Before the 1st bootup, delete the cache.txt and data folder. 
+0. You will have to generate the proto files using proto.sh. You can also run the project Makefile.
 1. From main directory, do `cd project`
 2. Then type `source bin/activate` (Use python3)
 3. Open another terminal window and do steps 1 and 2 again in the directory
