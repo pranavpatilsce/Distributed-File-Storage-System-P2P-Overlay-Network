@@ -10,3 +10,5 @@ This project can stream audio, video, and image files from client to server via 
 4. In the 1st terminal window: python ../server.py which will launch the server.
 5. In the 2nd terminal window: python ../client.py which will launch the client at localhost:5001
 6. The server port is `22222` and use `localhost` running of the project on localhost.
+7. APIs available are `/config`, `/upload`, and `/search`. `/download` is used internally.
+8. Refer to `ProjectReport.pdf` for a quick overview of our work.
